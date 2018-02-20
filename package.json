@@ -1,0 +1,37 @@
+{
+  "name": "webpack-starter",
+  "version": "1.0.0",
+  "description": "Webpack Project Starter",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack-dev-server",
+    "prod": "webpack -p"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hassam92/webpack-starter.git"
+  },
+  "author": "Muhammad Hassam Khan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hassam92/webpack-starter/issues"
+  },
+  "homepage": "https://github.com/Hassam92/webpack-starter#readme",
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "css-loader": "^0.28.9",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "html-webpack-plugin": "^2.30.1",
+    "node-sass": "^4.7.2",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.20.2",
+    "webpack": "^3.11.0",
+    "webpack-dev-server": "^2.11.1"
+  }
+}

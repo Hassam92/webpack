@@ -1,7 +1,12 @@
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const webpack = require('webpack');
 
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require("extract-text-webpack-plugin"); 
+const isProd = process.env.NODE_ENV === 'production';
+const cssDev = ['style-loader', 'css-loader', 'sass-loader'];
+const cssProd = ExtractTextPlugin.extract({ fallback: 'style-loader', use: ['css-loader','sass-loader'], publicPath: '/dist'})
+const cssConfig = isProd ? cssProd : cssDev;
 
 module.exports = {
   entry: './src/app.js',
@@ -13,16 +18,19 @@ module.exports = {
     rules: [
       {
         test: /.css$/,
-        use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: ['css-loader','sass-loader'],
-          publicPath: '/dist'
-        })
+        use: cssConfig
       },
       {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel-loader'
+      },
+      {
+        test: /\.(png|jpg|gif|svg)$/,
+        use: [
+          'file-loader?name=[name].[ext]&outputPath=images/&publicPath=images/',
+          'image-webpack-loader'
+        ] 
       }
     ]
   },
@@ -30,6 +38,7 @@ module.exports = {
     contentBase: path.join(__dirname, "dist"),
     compress: true,
     stats: 'errors-only',
+    hot: true,
     open: true
   },
   plugins: [
@@ -40,8 +49,10 @@ module.exports = {
     }),
     new ExtractTextPlugin({
       filename: 'app.css',
-      disable: false,
+      disable: !isProd,
       allChunks: true
-    })
+    }),
+    new webpack.NamedModulesPlugin(),
+    new webpack.HotModuleReplacementPlugin()
   ]
 };

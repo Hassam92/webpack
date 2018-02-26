@@ -1,4 +1,1 @@
-body {
-  background-color: #e9e9e9; }
-  body p {
-    color: #818181; }
+@import url(https://fonts.googleapis.com/css?family=Roboto:300,400,500,700);@import url(https://fonts.googleapis.com/css?family=Dancing+Script:400,700);body,html{height:100%;min-height:100%;margin:0;background:url(images/background.png) 50%;background-size:cover}body{font-family:Roboto,sans-serif;display:table;width:100%;height:100%}body .content{display:table-cell;text-align:center;vertical-align:middle}body .content #root h1{background-image:linear-gradient(90deg,#f64f6e 0,#ff795e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-size:100px;font-weight:900;font-family:Dancing Script,cursive;margin:0}

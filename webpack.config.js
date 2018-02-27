@@ -2,17 +2,24 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const webpack = require('webpack');
+const bootstrapEntryPoints = require('./webpack.bootstrap.config');
+const glob = require('glob');
+const PurifyCSSPlugin = require('purifycss-webpack');
 
 const isProd = process.env.NODE_ENV === 'production';
 const cssDev = ['style-loader', 'css-loader', 'sass-loader'];
 const cssProd = ExtractTextPlugin.extract({ fallback: 'style-loader', use: ['css-loader','sass-loader'], publicPath: '/dist'})
 const cssConfig = isProd ? cssProd : cssDev;
+const bootstrapConfig = isProd ? bootstrapEntryPoints.prod : bootstrapEntryPoints.dev;
 
 module.exports = {
-  entry: './src/app.js',
+  entry: {
+    app: './src/app.js',
+    bootstrap: bootstrapConfig
+  },
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'app.bundle.js'
+    path: path.resolve(__dirname, "dist"),
+    filename: '[name].bundle.js'
   },
   module: {
     rules: [
@@ -31,6 +38,18 @@ module.exports = {
           'file-loader?name=[name].[ext]&outputPath=images/&publicPath=images/',
           'image-webpack-loader'
         ] 
+      },
+      { 
+        test: /\.(woff2?|svg)$/,
+        use: 'url-loader?limit=10000&name=fonts/[name].[ext]'
+      },
+      { 
+        test: /\.(ttf|eot)$/,
+        use: 'file-loader?&name=fonts/[name].[ext]'
+      },
+      { 
+        test:/bootstrap-sass[\/\\]assets[\/\\]javascripts[\/\\]/,
+        use: 'imports-loader?jQuery=jquery'
       }
     ]
   },
@@ -48,11 +67,14 @@ module.exports = {
       template: './src/index.html'
     }),
     new ExtractTextPlugin({
-      filename: 'app.css',
+      filename: '/css/[name].css',
       disable: !isProd,
       allChunks: true
     }),
     new webpack.NamedModulesPlugin(),
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new PurifyCSSPlugin({
+      paths: glob.sync(path.join(__dirname, 'src/*.html')),
+    })
   ]
 };
